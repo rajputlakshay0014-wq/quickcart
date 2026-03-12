@@ -1,6 +1,11 @@
-header{
-  background:purple;
-  color:white;
-  text-align:center;
+.header {
+  display:flex;
+  justify-content:space-between;
   padding:20px;
+  background:#222;
+  color:white;
+}
+
+.cart-btn{
+  padding:8px 15px;
 }

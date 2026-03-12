@@ -1,54 +1,29 @@
+import "../styles/ProductCard.css";
+
 function ProductCard({ product, onAddToCart }) {
 
   return (
-
     <div className="product-card">
 
-      <div className="product-image-container">
+      <img
+        src={product.image}
+        alt={product.name}
+      />
 
-        <img
-          src={product.image}
-          alt={product.name}
-          className="product-image"
-        />
+      <h3>{product.name}</h3>
 
-      </div>
+      <p>{product.description}</p>
 
-      <div className="product-info">
+      <p>${product.price}</p>
 
-        <h3 className="product-name">{product.name}</h3>
-
-        <p className="product-description">
-          {product.description}
-        </p>
-
-        <div className="product-footer">
-
-          <span className="product-price">
-            ${product.price}
-          </span>
-
-          <span className="product-category">
-            {product.category}
-          </span>
-
-        </div>
-
-        <button
-          className="add-to-cart-btn"
-          onClick={() => onAddToCart(product)}
-        >
-
-          Add to Cart
-
-        </button>
-
-      </div>
+      <button
+        onClick={() => onAddToCart(product)}
+      >
+        Add to Cart
+      </button>
 
     </div>
-
   );
-
 }
 
 export default ProductCard;

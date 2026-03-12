@@ -1,125 +1,64 @@
 import "../styles/CartSidebar.css";
 
-function CartSidebar({ isOpen, onClose, cart, onUpdateQuantity, onRemoveItem }) {
+function CartSidebar({
+  isOpen,
+  onClose,
+  cart,
+  onUpdateQuantity,
+  onRemoveItem
+}) {
 
-  const calculateTotal = () => {
-
-    return cart.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-
-  };
+  const total = cart.reduce(
+    (t, item) => t + item.price * item.quantity,
+    0
+  );
 
   return (
-
     <div className={`cart-sidebar ${isOpen ? "open" : ""}`}>
 
       <div className="cart-header">
-
         <h2>Your Cart</h2>
-
-        <button onClick={onClose} className="close-btn">
-          ✕
-        </button>
-
+        <button onClick={onClose}>X</button>
       </div>
 
-      <div className="cart-items">
+      {cart.length === 0 && <p>Your cart is empty</p>}
 
-        {cart.length === 0 ? (
+      {cart.map((item) => (
+        <div key={item.id} className="cart-item">
 
-          <p className="empty-cart">
-            Your cart is empty
-          </p>
+          <p>{item.name}</p>
 
-        ) : (
+          <button
+            onClick={() =>
+              onUpdateQuantity(item.id, item.quantity - 1)
+            }
+          >
+            -
+          </button>
 
-          cart.map(item => (
+          {item.quantity}
 
-            <div key={item.id} className="cart-item">
+          <button
+            onClick={() =>
+              onUpdateQuantity(item.id, item.quantity + 1)
+            }
+          >
+            +
+          </button>
 
-              <img
-                src={item.image}
-                alt={item.name}
-                className="cart-item-image"
-              />
-
-              <div className="cart-item-details">
-
-                <h4 className="cart-item-name">
-                  {item.name}
-                </h4>
-
-                <p className="cart-item-price">
-                  ${item.price}
-                </p>
-
-              </div>
-
-              <div className="cart-item-quantity">
-
-                <button
-                  className="quantity-btn"
-                  onClick={() =>
-                    onUpdateQuantity(item.id, item.quantity - 1)
-                  }
-                >
-                  -
-                </button>
-
-                <span className="quantity-display">
-                  {item.quantity}
-                </span>
-
-                <button
-                  className="quantity-btn"
-                  onClick={() =>
-                    onUpdateQuantity(item.id, item.quantity + 1)
-                  }
-                >
-                  +
-                </button>
-
-              </div>
-
-              <button
-                className="remove-btn"
-                onClick={() => onRemoveItem(item.id)}
-              >
-                ✕
-              </button>
-
-            </div>
-
-          ))
-
-        )}
-
-      </div>
-
-      {cart.length > 0 && (
-
-        <div className="cart-footer">
-
-          <div className="cart-total">
-
-            <span>Total:</span>
-
-            <span>
-              ${calculateTotal().toFixed(2)}
-            </span>
-
-          </div>
+          <button
+            onClick={() => onRemoveItem(item.id)}
+          >
+            Remove
+          </button>
 
         </div>
+      ))}
 
-      )}
+      <h3>Total: ${total.toFixed(2)}</h3>
 
     </div>
-
   );
-
 }
 
 export default CartSidebar;
