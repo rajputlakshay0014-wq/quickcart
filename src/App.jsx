@@ -1,8 +1,15 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import ProductList from "./components/ProductList";
 import CartSidebar from "./components/CartSidebar";
+import HomePage from "./components/HomePage";
+import CategoryPage from "./components/CategoryPage";
+import CartPage from "./components/CartPage";
+
 import { products } from "./data/products";
+
 import "./styles/App.css";
 
 function App() {
@@ -12,10 +19,9 @@ function App() {
 
   const addToCart = (product) => {
 
-    const existingItem = cart.find(item => item.id === product.id);
+    const existing = cart.find(item => item.id === product.id);
 
-    if (existingItem) {
-
+    if (existing) {
       setCart(
         cart.map(item =>
           item.id === product.id
@@ -23,34 +29,25 @@ function App() {
             : item
         )
       );
-
     } else {
-
       setCart([...cart, { ...product, quantity: 1 }]);
-
     }
 
   };
 
-  const removeFromCart = (productId) => {
-
-    setCart(cart.filter(item => item.id !== productId));
-
+  const removeFromCart = (id) => {
+    setCart(cart.filter(item => item.id !== id));
   };
 
-  const updateQuantity = (productId, newQuantity) => {
+  const updateQuantity = (id, qty) => {
 
-    if (newQuantity <= 0) {
-
-      removeFromCart(productId);
-
+    if (qty <= 0) {
+      removeFromCart(id);
     } else {
 
       setCart(
         cart.map(item =>
-          item.id === productId
-            ? { ...item, quantity: newQuantity }
-            : item
+          item.id === id ? { ...item, quantity: qty } : item
         )
       );
 
@@ -63,38 +60,66 @@ function App() {
   };
 
   const getTotalItems = () => {
-
     return cart.reduce((total, item) => total + item.quantity, 0);
-
   };
 
   return (
 
-    <div className="app">
+    <BrowserRouter>
 
-      <Header
-        cartItemCount={getTotalItems()}
-        onCartClick={toggleCart}
-      />
+      <div>
 
-      <main className="main-content">
-
-        <ProductList
-          products={products}
-          onAddToCart={addToCart}
+        <Header
+          cartItemCount={getTotalItems()}
+          onCartClick={toggleCart}
         />
 
-      </main>
+        <main className="main-content">
 
-      <CartSidebar
-        isOpen={isCartOpen}
-        onClose={toggleCart}
-        cart={cart}
-        onUpdateQuantity={updateQuantity}
-        onRemoveItem={removeFromCart}
-      />
+          <Routes>
 
-    </div>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  products={products}
+                  onAddToCart={addToCart}
+                />
+              }
+            />
+
+            <Route
+              path="/category/:category"
+              element={
+                <CategoryPage
+                  products={products}
+                  onAddToCart={addToCart}
+                />
+              }
+            />
+
+            <Route
+              path="/cart"
+              element={
+                <CartPage cart={cart} />
+              }
+            />
+
+          </Routes>
+
+        </main>
+
+        <CartSidebar
+          isOpen={isCartOpen}
+          onClose={toggleCart}
+          cart={cart}
+          onUpdateQuantity={updateQuantity}
+          onRemoveItem={removeFromCart}
+        />
+
+      </div>
+
+    </BrowserRouter>
 
   );
 

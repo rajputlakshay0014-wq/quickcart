@@ -1,38 +1,40 @@
+import { Link } from "react-router-dom";
+import "../styles/Header.css";
+
 function Header({ cartItemCount, onCartClick }) {
 
   return (
 
     <header className="header">
 
-      <div className="header-container">
+      <Link to="/" className="logo">
+        <h1>🛒 QuickCart</h1>
+      </Link>
 
-        <div className="header-content">
+      <nav>
 
-          <div className="header-text">
+        <Link to="/">Home</Link>
 
-            <h1 className="header-title">🛒 QuickCart</h1>
+        <Link to="/category/Electronics">
+          Electronics
+        </Link>
 
-            <p className="header-subtitle">
-              Your one-stop shop for everything
-            </p>
+        <Link to="/category/Accessories">
+          Accessories
+        </Link>
 
-          </div>
+        <Link to="/category/Home">
+          Home
+        </Link>
 
-          <button className="cart-icon-btn" onClick={onCartClick}>
+      </nav>
 
-            🛒
-
-            {cartItemCount > 0 && (
-              <span className="cart-badge">
-                {cartItemCount}
-              </span>
-            )}
-
-          </button>
-
-        </div>
-
-      </div>
+      <button
+        className="cart-btn"
+        onClick={onCartClick}
+      >
+        Cart ({cartItemCount})
+      </button>
 
     </header>
 
